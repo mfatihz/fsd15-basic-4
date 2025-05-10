@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 :root {
     --primary-color: #6c63ff;
     --primary-light: rgba(108, 99, 255, 0.1);
@@ -65,7 +67,7 @@ main {
 }
 
 .current-time {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--gray-color);
     font-weight: 500;
 }
@@ -73,9 +75,7 @@ main {
 h2 {
     color: var(--dark-color);
     font-weight: 600;
-}
 
-h2 {
     font-size: 1.5rem;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     -webkit-background-clip: text;
@@ -101,6 +101,7 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    position: relative;
 }
 
 /* Form Styles */
@@ -118,7 +119,7 @@ h2 {
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
+    /* margin-bottom: 0.5rem; */
     font-weight: 500;
     color: var(--dark-color);
     font-size: 0.9rem;
@@ -207,7 +208,8 @@ select:focus {
 }
 
 #btn-submit {
-    width: 200px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Task List Styles */
@@ -216,9 +218,87 @@ select:focus {
     justify-content: space-between;
 }
 
-#new-task-form-section h2 {
-    margin: auto;
+#new-task-form-section .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    margin: -1.5rem -1.5rem 0 -1.5rem; /* Negative margins to stretch to card edges */
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
+
+#new-task-form-section .card-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    flex-grow: 1;
+    color: white;
+    text-align: center;
+}
+
+#new-task-form-section .card-footer {
+    padding: 1rem 1.5rem; /* Changed from 16px 20px to match card padding units */
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 -1.5rem -1.5rem -1.5rem; /* Added negative margin-bottom to match */
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-top: 1px solid #e0e0e0; /* Added subtle border */
+}
+
+
+#hide-task-form {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+#hide-task-form:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#hide-task-form svg {
+    stroke: white;
+}
+
+
+
+
+
+
+/* Close Button */
+#hide-task-form {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+#hide-task-form:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#hide-task-form svg {
+    stroke: white;
+}
+
+
+
 
 .task-list-container {
     border-radius: var(--border-radius);
@@ -396,7 +476,7 @@ input[type="checkbox"]:checked::after {
 }
 
 /* Toggle switch */
-.toggle-switch {
+/* .toggle-switch {
     display: flex;
     align-items: center;
     margin-top: auto;
@@ -442,15 +522,34 @@ input[type="checkbox"]:checked::after {
 .toggle-switch .label {
     font-size: 0.9rem;
     color: var(--dark-color);
+} */
+
+.toggle-filters {
+    background: none;
+    border: none;
+    color: var(--dark-color);
+    font-size: 0.9rem; /* Matching the toggle-switch label size */
+    font-weight: 500; /* Matching the toggle-switch label weight */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.toggle-filters:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Add this to your CSS */
 #delete-all {
-    margin-left: auto;
     transition: all 0.2s ease;
 }
 
-#delete-all:hover {
+#delete-all:hover,
+#show-task-form:hover {
     transform: scale(1.05);
     box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
 }
@@ -466,11 +565,11 @@ input[type="checkbox"]:checked::after {
 }
 
 @media (max-width: 600px) {
-    .employee-section {
+    /* .employee-section {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
-    }
+    } */
     
     .task-list-header, .task-list-item {
         grid-template-columns: 40px 1fr 60px;
@@ -531,12 +630,12 @@ input[type="checkbox"]:checked::after {
     .filter-controls {
         flex-direction: row;
         align-items: center;
-        gap: 1rem;
+        gap: 0.3rem;
     }
     
-    .clear-filters-btn {
+    /* .clear-filters-btn {
         margin-left: 0;
-    }
+    } */
 }
 
 /* Animations */
@@ -550,14 +649,14 @@ input[type="checkbox"]:checked::after {
 }
 
 /* Utility Classes */
-.flex-left-1 {
+.flex-right-1 {
     display: flex;
+    gap: 1rem;
     align-items: center;
 }
 
-.flex-left-1 button:first-child {
+.flex-right-1 button:last-child {
     flex: 1;
-    margin-right: var(--section-gap);
 }
 
 .flex-between {

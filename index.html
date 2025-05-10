@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
@@ -20,62 +19,78 @@
 
         <!-- New Task Form Section (initially hidden) -->
         <section class="card card-flex hidden" id="new-task-form-section">
-            <h2>Add New Task</h2>
-            <form action="#" name="new-task-form" id="new-task-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="new-date">Date</label>
-                        <input type="date" name="new-date" id="new-date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="new-task">Task Description</label>
-                        <textarea rows=1 name="new-task" id="new-task" placeholder="Enter task description" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="priority">Priority</label>
-                        <select name="new-priority" id="new-priority" required>
-                            <option value="" disabled selected>Select priority</option>
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-
-            <div class="flex-between">
-                <button type="button" class="btn btn-secondary" id="hide-task-form">
+            <div class="card-header">
+                <h2>Add New Task</h2>
+                <button type="button" id="hide-task-form" aria-label="Close form">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
-                    <span class="btn-text">Hide Form</span>
                 </button>
-                <button type="submit" form="new-task-form" class="btn" id="btn-submit">
+            </div>
+            <!-- <button type="button" class="btn-bordered" id="hide-task-form">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            <h2>Add New Task</h2> -->
+            <div class="card-body">
+                <form action="#" name="new-task-form" id="new-task-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="new-date">Date</label>
+                            <input type="date" name="new-date" id="new-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-task">Task Description</label>
+                            <textarea rows=1 name="new-task" id="new-task" placeholder="Enter task description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <select name="new-priority" id="new-priority" required>
+                                <option value="" disabled selected>Select priority</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- <button type="submit" form="new-task-form" class="btn" id="btn-submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                     <span class="btn-text">Add Task</span>
-                </button>
+                </button> -->
             </div>
-        </section>
-
-        <div class="flex-left-1" id="flex-left-1-action">
-            <button type="button" class="btn" id="show-task-form">
+            <div class="card-footer">
+            <button type="submit" form="new-task-form" class="btn" id="btn-submit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
-                <span class="btn-text">Add New Task</span>
+                <span class="btn-text">Add Task</span>
             </button>
+        </div>
+        </section>
 
+        <div class="flex-right-1" id="flex-right-1-action">
             <button type="button" class="btn btn-danger" id="delete-all">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"></polyline>
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                 </svg>
                 <span class="btn-text">Delete All</span>
+            </button>
+            <button type="button" class="btn" id="show-task-form">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span class="btn-text">Add New Task</span>
             </button>
         </div>
 
@@ -90,19 +105,22 @@
                         </svg>
                         Clear Filters
                     </button>
-                    <label class="toggle-switch">
+                    <!-- <label class="toggle-switch">
                         <input type="checkbox" id="show-filters" checked>
                         <span class="slider"></span>
                         <span class="label">Filters</span>
-                    </label>
+                    </label> -->
+                    <button type="button" class="toggle-filters" id="toggle-filters">Filters ▼</button>
+                    
+                    
                 </div>
-                <!-- <button type="button" class="toggle-filters" id="toggle-filters">Filter Tasks ▼</button> -->
+                
             </div>
             <form class="filter-card filter-grid" id="filter-section">
                 <div class="form-group">
                     <label for="overdue-filter">Overdue Status</label>
                     <select name="overdue-filter" class="filter" id="overdue-filter">
-                        <option value="All" selected>All Tasks</option>
+                        <option value="" selected>All Tasks</option>
                         <option value="Overdue">Overdue Only</option>
                     </select>
                 </div>
@@ -110,7 +128,7 @@
                 <div class="form-group">
                     <label for="date-type-filter">Date Filter Type</label>
                     <select name="date-type-filter" id="date-type-filter">
-                        <option value="">All Dates</option>
+                        <option value="" selected>All Dates</option>
                         <option value="Date">Exact Date</option>
                         <option value="Max">Before Date</option>
                         <option value="Min">After Date</option>
@@ -137,7 +155,7 @@
                         <option value="High">High</option>
                     </select>
                 </div>
-        </form>
+            </form>
             <div class="task-list-container">
                 <div class="task-list-header">
                     <div class="done-header">Status</div>

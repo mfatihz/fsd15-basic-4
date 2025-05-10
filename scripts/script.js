@@ -4,17 +4,18 @@ const taskDb = [];
 function updateCurrentTime() {
     const now = new Date();
     const options = { 
-        weekday: 'short', 
+        weekday: 'long', 
         day: '2-digit', 
-        month: '2-digit', 
+        month: 'long', 
         year: 'numeric',
         // hour: '2-digit',
         // minute: '2-digit'
     };
+
     const locale = 'id-ID';
     const dateTimeString = now.toLocaleDateString(locale, options);
     
-    document.getElementById('current-time').textContent = dateTimeString.replace(/\//g, '-');
+    document.getElementById('current-time').textContent = dateTimeString;
 }
 
 // Initialize and update time
@@ -266,14 +267,14 @@ function showTask() {
 document.getElementById("show-task-form").addEventListener("click", function() {
     document.getElementById("new-task-form-section").classList.remove('hidden');
     // this.classList.add('hidden');
-    document.getElementById("flex-left-1-action").classList.add('hidden');
+    document.getElementById("flex-right-1-action").classList.add('hidden');
     document.getElementById('new-date').focus();
 });
 
 document.getElementById("hide-task-form").addEventListener("click", function() {
     document.getElementById("new-task-form-section").classList.add('hidden');
     // document.getElementById("show-task-form").classList.remove('hidden');
-    document.getElementById("flex-left-1-action").classList.remove('hidden');
+    document.getElementById("flex-right-1-action").classList.remove('hidden');
 });
 
 // Event listeners
@@ -310,7 +311,7 @@ document.getElementById("filter-priority").addEventListener("change", function()
 
 // Collapse filters by default on page load
 document.getElementById("filter-section").classList.add("collapsed");
-document.getElementById("show-filters").checked = false;
+// document.getElementById("show-filters").checked = false;
 
 document.getElementById("new-task-form").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -320,14 +321,19 @@ document.getElementById("new-task-form").addEventListener("submit", function(e) 
 });
 
 // Toggle filter section visibility
-document.getElementById("show-filters").addEventListener("change", function() {
+/* document.getElementById("show-filters").addEventListener("change", function() {
     document.getElementById("filter-section").classList.toggle("collapsed", !this.checked);
+}); */
+document.getElementById("toggle-filters").addEventListener("click", function() {
+    document.getElementById("filter-section").classList.toggle("collapsed");
+    this.textContent = this.textContent.includes("▼") ? 
+        "Filters ▲" : "Filters ▼";
 });
 
 document.getElementById("clear-all-filters").addEventListener("click", function(e) {
     e.preventDefault();
-    document.getElementById("overdue-filter").value = "All";
-    document.getElementById("date-type-filter").value = "Date";
+    document.getElementById("overdue-filter").value = "";
+    document.getElementById("date-type-filter").value = "";
     document.getElementById("filter-date-1").value = "";
     document.getElementById("filter-date-2").value = "";
     document.getElementById("filter-priority").value = "";
