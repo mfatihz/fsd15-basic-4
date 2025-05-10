@@ -46,6 +46,8 @@ function addTask() {
         priority: priorityInput.value,
         isDone: false,
     });
+
+    localStorage.setItem("myCat", "Tom");
     
     sortTasksByDateDescending(taskDb);
     
@@ -210,47 +212,44 @@ function showTask() {
         const date2Filter = document.getElementById("filter-date-2").value;
         const priorityFilter = document.getElementById("filter-priority").value;
         
-        const dateFrom = date1Filter ? new Date(date1Filter) : null;
-        const dateTo = date2Filter ? new Date(date2Filter) : null;
-        
         // Check overdue filter first
         let overdueMatch = true;
         if (overdueFilter === "Overdue") {
             overdueMatch = taskDate < today && !task.isDone;
         }
-        
+        console.log(dateTypeFilter);
         // Then check date filter
         let dateMatch = false;
-        if (!date1Filter) {
-            dateMatch = true;
-        } else {
-            switch(dateTypeFilter) {
-                case "":
-                    dateMatch = true;
-                    break;
-                case "Date":
-                    dateMatch = taskDate.getTime() === dateFrom.getTime();
-                    break;
-                case "Max":
-                    dateMatch = taskDate <= dateFrom;
-                    break;
-                case "Min":
-                    dateMatch = taskDate >= dateFrom;
-                    break;
-                case "Range":
-                    dateMatch = taskDate >= dateFrom && (!dateTo || taskDate <= dateTo);
-                    break;
-                default:
-                    dateMatch = true;
-            }
+        switch(dateTypeFilter) {
+            case "":
+                dateMatch = true;
+                break;
+            case "Date":
+                dateMatch =  date1Filter ? taskDate.getTime() === (new Date(date1Filter)).getTime() : true;
+                // dateMatch = taskDate.getTime() === dateFrom.getTime();
+                break;
+            case "Min":
+                dateMatch =  date1Filter ? taskDate.getTime() >= (new Date(date1Filter)).getTime() : true;
+                //dateMatch = taskDate >= dateFrom;
+                break;
+            case "Max":
+                dateMatch =  date1Filter ? taskDate.getTime() <= (new Date(date1Filter)).getTime() : true;
+                // dateMatch = taskDate <= dateFrom;
+                break;
+            case "Range":
+                dateMatch = (date1Filter ? taskDate.getTime() >= (new Date(date1Filter)).getTime() : true)
+                    && (date2Filter ? taskDate.getTime() <= (new Date(date2Filter)).getTime() : true);
+                break;
+            default:
+                dateMatch = true;
         }
         
         const priorityMatch = !priorityFilter || task.priority.toLowerCase() === priorityFilter.toLowerCase();
         
-        todoList.appendChild(taskItemTemplate(i, task));
-        hasActiveTasks = true;
-
         if (overdueMatch && dateMatch && priorityMatch) {
+            todoList.appendChild(taskItemTemplate(i, task));
+            hasActiveTasks = true;
+            
             if (task.isDone) {
                 doneList.appendChild(taskItemTemplate(i, task));
                 hasCompletedTasks = true;
@@ -284,7 +283,6 @@ document.getElementById("overdue-filter").addEventListener("change", function() 
 });
 
 document.getElementById("date-type-filter").addEventListener("change", function(e) {
-    console.log(e.target.value == "");
     const date1FilterContainer = document.getElementById("date1-filter");
     date1FilterContainer.classList.toggle('hidden', e.target.value == "");
 
