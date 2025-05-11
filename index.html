@@ -11,8 +11,19 @@
         <!-- Employee Section -->
         <section class="employee-section card">
             <div class="employee-info">
-                <div class="employee-name">M. Fatih Zuhdy</div>
-                <div class="employee-position">Student FSD15 15083</div>
+                <div class="employee-name-container">
+                    <div class="employee-name" id="employee-name"></div>
+                    <span class="edit-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="editGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="var(--primary-color)" />
+                                <stop offset="100%" stop-color="var(--secondary-color)" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z" fill="url(#editGradient)"/>
+                    </svg></span>
+                </div>
+                <div class="employee-position" id="employee-position"></div>
             </div>
             <div class="current-time" id="current-time"></div>
         </section>
@@ -28,13 +39,6 @@
                     </svg>
                 </button>
             </div>
-            <!-- <button type="button" class="btn-bordered" id="hide-task-form">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            <h2>Add New Task</h2> -->
             <div class="card-body">
                 <form action="#" name="new-task-form" id="new-task-form">
                     <div class="form-grid">
@@ -57,14 +61,6 @@
                         </div>
                     </div>
                 </form>
-
-                <!-- <button type="submit" form="new-task-form" class="btn" id="btn-submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span class="btn-text">Add Task</span>
-                </button> -->
             </div>
             <div class="card-footer">
             <button type="submit" form="new-task-form" class="btn" id="btn-submit">
@@ -111,10 +107,7 @@
                         <span class="label">Filters</span>
                     </label> -->
                     <button type="button" class="toggle-filters" id="toggle-filters">Filters ▼</button>
-                    
-                    
                 </div>
-                
             </div>
             <form class="filter-card filter-grid" id="filter-section">
                 <div class="form-group">
@@ -167,7 +160,7 @@
                 <div id="todo-list">
                     <!-- Tasks will be inserted here -->
                 </div>
-                <div id="todo-empty" class="empty-state hidden">No tasks found. Add a task to get started!</div>
+                <div id="todo-empty" class="empty-state hidden">No tasks found!</div>
             </div>            
         </section>
         
@@ -184,7 +177,7 @@
                 <div id="completed-list">
                     <!-- Completed tasks will be inserted here -->
                 </div>
-                <div id="completed-empty" class="empty-state hidden">No completed tasks yet. Keep going!</div>
+                <div id="completed-empty" class="empty-state hidden">No completed tasks yet!</div>
             </div>
         </section>
     </main>

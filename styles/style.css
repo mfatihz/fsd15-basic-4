@@ -167,6 +167,11 @@ select:focus {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    
+    svg {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 .btn:hover {
@@ -212,6 +217,103 @@ select:focus {
     margin-bottom: 0.5rem;
 }
 
+
+/* Employee Info Styles */
+.employee-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.employee-name-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.employee-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.employee-position {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+}
+
+/* Edit Icon Styles */
+.edit-icon {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: var(--transition);
+    display: inline-flex;
+}
+
+.edit-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Edit Form Styles - Compact Version */
+.employee-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Reduced from 0.75rem */
+    width: 100%;
+}
+
+.employee-edit-form label {
+    font-size: 0.85rem; /* Slightly smaller */
+    font-weight: 500;
+    color: var(--dark-color);
+    margin-top: 0.25rem; /* Reduced from 0.5rem */
+}
+
+.employee-edit-form label:first-child {
+    margin-top: 0;
+}
+
+.employee-edit-input {
+    font-family: inherit;
+    background-color: white;
+    color: var(--dark-color);
+    border: 1px solid var(--primary-color) !important;
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem; /* Slightly more compact */
+    width: 100%;
+    font-size: 0.95rem;
+}
+
+.employee-edit-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.employee-edit-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem; /* Reduced from 1rem */
+    justify-content: flex-end;
+}
+
+/* Compact buttons */
+.employee-edit-actions .btn-sm {
+    padding: 0.3rem 0.75rem; /* More compact button padding */
+    font-size: 0.85rem;
+}
+
+/* Remove the spacer div since we're using gap */
+.employee-edit-form > div:empty {
+    display: none;
+}
+
+
+
+
+
+
+
 /* Task List Styles */
 .task-list-name-header {
     display: flex;
@@ -222,7 +324,7 @@ select:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0.5rem 2rem;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     color: white;
     margin: -1.5rem -1.5rem 0 -1.5rem; /* Negative margins to stretch to card edges */
@@ -239,28 +341,16 @@ select:focus {
 }
 
 #new-task-form-section .card-footer {
-    padding: 1rem 1.5rem; /* Changed from 16px 20px to match card padding units */
+    padding: 1rem 1.5rem;
     background-color: #f9f9f9;
     display: flex;
     justify-content: flex-end;
-    margin: 0 -1.5rem -1.5rem -1.5rem; /* Added negative margin-bottom to match */
+    margin: 0 -1.5rem -1.5rem -1.5rem;
     border-radius: 0 0 var(--border-radius) var(--border-radius);
-    border-top: 1px solid #e0e0e0; /* Added subtle border */
+    border-top: 1px solid #e0e0e0;
 }
 
 
-#hide-task-form {
-    background: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-}
 
 #hide-task-form:hover {
     background-color: rgba(255, 255, 255, 0.2);
@@ -269,11 +359,6 @@ select:focus {
 #hide-task-form svg {
     stroke: white;
 }
-
-
-
-
-
 
 /* Close Button */
 #hide-task-form {
@@ -288,17 +373,6 @@ select:focus {
     justify-content: center;
     transition: background-color 0.2s;
 }
-
-#hide-task-form:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-#hide-task-form svg {
-    stroke: white;
-}
-
-
-
 
 .task-list-container {
     border-radius: var(--border-radius);
@@ -548,10 +622,39 @@ input[type="checkbox"]:checked::after {
     transition: all 0.2s ease;
 }
 
-#delete-all:hover,
-#show-task-form:hover {
+#delete-all:hover {
     transform: scale(1.05);
     box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+#show-task-form:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
+}
+
+
+/* For both buttons */
+#delete-all, #show-task-form {
+    transition: all 0.2s ease;
+}
+
+
+/* Hover effects */
+#delete-all:hover, #show-task-form:hover {
+    transform: translateY(-2px); /* Same vertical lift */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+}
+
+/* Keep danger color for delete button */
+#delete-all:hover {
+    background-color: #ff5252;
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3); /* Red-tinted shadow */
+}
+
+/* Primary color for add task button */
+#show-task-form:hover {
+    background-color: var(--secondary-color);
+    box-shadow: 0 4px 8px rgba(108, 99, 255, 0.3); /* Purple-tinted shadow */
 }
 
 /* Responsive Design */

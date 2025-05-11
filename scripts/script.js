@@ -1,5 +1,166 @@
-const taskDb = [];
+let db = JSON.parse(localStorage.getItem("db"));
+let taskDb = db !== null ? db : [];
+
+// Employee info editing functionality with localStorage
+function setupEmployeeEditing() {
+    // Get elements
+    const editIcon = document.querySelector('.edit-icon');
+    const nameElement = document.getElementById('employee-name');
+    const positionElement = document.getElementById('employee-position');
+    const employeeInfo = document.querySelector('.employee-info');
+    
+    // Check if we have saved data
+    const savedName = localStorage.getItem('employeeName');
+    const savedPosition = localStorage.getItem('employeePosition');
+    
+    // If no saved name exists, show edit form immediately
+    if (!savedName) {
+        showEditForm();
+        return;
+    }
+    
+    // Load saved values
+    nameElement.textContent = savedName;
+    if (savedPosition) {
+        positionElement.textContent = savedPosition;
+    }
+
+    // Edit icon click handler
+    editIcon.onclick = showEditForm;
+
+    function showEditForm() {
+        const currentName = nameElement.textContent.trim();
+        const currentPosition = positionElement.textContent.trim();
         
+        // Create container for edit form
+        const formContainer = document.createElement('div');
+        formContainer.className = 'employee-edit-form';
+        
+        // Create name input
+        const nameLabel = document.createElement('label');
+        nameLabel.textContent = 'Name:';
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = currentName;
+        nameInput.className = 'employee-edit-input';
+        nameInput.style.fontSize = '1.2rem';
+        nameInput.style.fontWeight = '600';
+        nameInput.placeholder = 'Enter your name';
+        nameInput.required = true;
+        
+        // Create position input
+        const positionLabel = document.createElement('label');
+        positionLabel.textContent = 'Position:';
+        const positionInput = document.createElement('input');
+        positionInput.type = 'text';
+        positionInput.value = currentPosition;
+        positionInput.className = 'employee-edit-input';
+        positionInput.style.fontSize = '0.9rem';
+        positionInput.placeholder = 'Enter your position';
+        
+        // Create action buttons
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'employee-edit-actions';
+        
+        const saveBtn = document.createElement('button');
+        saveBtn.textContent = 'Save';
+        saveBtn.className = 'btn btn-sm';
+        
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = savedName ? 'Cancel' : 'Skip';
+        cancelBtn.className = 'btn btn-secondary btn-sm';
+        
+        buttonsContainer.appendChild(saveBtn);
+        buttonsContainer.appendChild(cancelBtn);
+        
+        // Build the form
+        formContainer.appendChild(nameLabel);
+        formContainer.appendChild(nameInput);
+        formContainer.appendChild(positionLabel);
+        formContainer.appendChild(positionInput);
+        formContainer.appendChild(buttonsContainer);
+        
+        // Replace content with form
+        employeeInfo.innerHTML = '';
+        employeeInfo.appendChild(formContainer);
+        
+        // Focus the name input
+        nameInput.focus();
+        
+        // Save handler
+        saveBtn.onclick = () => {
+            const newName = nameInput.value.trim();
+            const newPosition = positionInput.value.trim();
+            
+            if (!newName) {
+                nameInput.focus();
+                return;
+            }
+            
+            localStorage.setItem('employeeName', newName);
+            localStorage.setItem('employeePosition', newPosition || '');
+            restoreNormalView(newName, newPosition);
+        };
+        
+        // Cancel/Skip handler
+        cancelBtn.onclick = () => {
+            if (savedName) {
+                restoreNormalView(savedName, savedPosition);
+            } else {
+                // On first load with no data, set default values if skipped
+                const defaultName = 'Employee Name';
+                const defaultPosition = 'Employee Position';
+                localStorage.setItem('employeeName', defaultName);
+                localStorage.setItem('employeePosition', defaultPosition);
+                restoreNormalView(defaultName, defaultPosition);
+            }
+        };
+        
+        // Handle Enter key
+        nameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') positionInput.focus();
+        });
+        
+        positionInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') saveBtn.click();
+            if (e.key === 'Escape') cancelBtn.click();
+        });
+    }
+    
+    function restoreNormalView(name, position) {
+        employeeInfo.innerHTML = `
+            <div class="employee-name-container">
+                <div class="employee-name" id="employee-name">${name}</div>
+                <span class="edit-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="editGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="var(--primary-color)" />
+                            <stop offset="100%" stop-color="var(--secondary-color)" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z" fill="url(#editGradient)"/>
+                </svg></span>
+            </div>
+            <div class="employee-position" id="employee-position">${position || ''}</div>
+        `;
+        
+        // Reinitialize
+        setupEmployeeEditing();
+    }
+}
+
+// Initialize when DOM is ready
+function initEmployeeEditing() {
+    if (document.getElementById('employee-name')) {
+        setupEmployeeEditing();
+    } else {
+        document.addEventListener('DOMContentLoaded', setupEmployeeEditing);
+    }
+}
+
+initEmployeeEditing();
+
+
 // Updated time formatting
 function updateCurrentTime() {
     const now = new Date();
@@ -46,11 +207,12 @@ function addTask() {
         priority: priorityInput.value,
         isDone: false,
     });
-
-    localStorage.setItem("myCat", "Tom");
-    
     sortTasksByDateDescending(taskDb);
     
+    localStorage.setItem("db", JSON.stringify(taskDb));
+    let db = JSON.parse(localStorage.getItem("db"));
+    taskDb = db;
+
     // Clear form and hide it
     taskInput.value = '';
     priorityInput.value = '';
@@ -173,6 +335,10 @@ deleteAll.onclick = function() {
         taskDb.length = 0;
         clearTodoListElement();
         showTask();
+
+        localStorage.setItem("db", JSON.stringify(taskDb));
+        let db = JSON.parse(localStorage.getItem("db"));
+        taskDb = db;
     }
 };
 
@@ -181,6 +347,10 @@ function deleteTask(index) {
         taskDb.splice(index, 1);
         clearTodoListElement();
         showTask();
+
+        localStorage.setItem("db", JSON.stringify(taskDb));
+        let db = JSON.parse(localStorage.getItem("db"));
+        taskDb = db;
     }
 }
 
@@ -188,6 +358,10 @@ function doneTask(index) {
     taskDb[index].isDone = !taskDb[index].isDone;
     clearTodoListElement();
     showTask();
+
+    localStorage.setItem("db", JSON.stringify(taskDb));
+    let db = JSON.parse(localStorage.getItem("db"));
+    taskDb = db;
 }
 
 function showTask() {
@@ -217,7 +391,7 @@ function showTask() {
         if (overdueFilter === "Overdue") {
             overdueMatch = taskDate < today && !task.isDone;
         }
-        console.log(dateTypeFilter);
+        
         // Then check date filter
         let dateMatch = false;
         switch(dateTypeFilter) {
