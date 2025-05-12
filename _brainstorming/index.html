@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        form fieldset {
+            display: flex;
+            gap: 8px;
+            width: 100px;
+            margin: auto;
+        }
+
+        h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        #btn-submit {
+            margin: auto;
+            margin-left: 1rem;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #filters {
+            margin-bottom: 0.5rem;
+        }
+
+        #filters input[type="reset"] {
+            margin: auto;
+        }
+
+        #todo-list,
+        #completed-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .todo-item {
+            display: flex;
+            gap: 1.5rem;
+            border-bottom: 1px solid gray;
+        }
+        
+        #todo-list .done-item {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .overdue-item > div {
+            color: red;
+        }
+
+        .task-group {
+            display: flex;
+            width: 100%;
+            /* height: 32px; */
+            align-items: center;
+        }
+        .task-group > button {
+            margin-left: auto;
+        }
+        
+        .header {
+            display: flex;
+            gap: 1.5rem;
+            border-top: 1px solid gray;
+            border-bottom: 1px solid gray;
+        }
+
+        .filter-header {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .done-header,
+        .done-content {
+            width: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .date-header,
+        .date-content {
+            width: 64px;
+        }
+
+        .task-header ,
+        .task-content {
+            width: 192px;
+        }
+        
+        .priority-header ,
+        .priority-content {
+            width: 64px;
+        }
+
+        .delete-header,
+        .delete-content {
+            width: 64px;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <form action="#" name="new-task-form" id="new-task-form">
+            <fieldset>
+                <legend>Add new task</legend>
+                <label>Date
+                    <input type="date" name="new-date" id="new-date" placeholder="date" required>
+                </label>
+                <label>Task
+                    <input type="text" name="new-task" id="new-task" placeholder="new task" value="abc" required>
+                </label>
+                <label>Priority
+                    <select name="priority" id="priority" required>
+                        <option selected value>Select Priority</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </label>
+                <button type="submit" id="btn-submit">Add</button>
+            </fieldset>
+        </form>
+        <section>
+            <div class="task-group">
+                <h3>Todo</h3>
+                <button type="button" id="delete-all">Delete All</button>
+            </div>
+            <form id="filters">
+                <fieldset>
+                    <legend>Filter</legend>
+                    <label>
+                        Date Type
+                        <select name="date-type-filter" id="date-type-filter">
+                        <option value="Date">Date</option>
+                        <option value="Min">Min</option>
+                        <option value="Max">Max</option>
+                        <option value="Range">Range</option>
+                    </select>
+                    </label>
+                    <label>
+                        Date
+                        <input type="date" class="filter" name="filter-date-1" id="filter-date-1" placeholder="">
+                    </label>
+                    <label id="date2-filter">To Date
+                        <input type="date" class="filter" name="filter-date-2" id="filter-date-2" placeholder="">
+                    </label>
+                    <label>Priority
+                        <select name="filter-priority" class="filter" id="filter-priority">
+                            <option selected value>Select Priority</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </label>
+                    <input type="reset" value="Clear Filters">
+                </fieldset>
+            </form>
+                
+            <div class="header">
+                <div class="done-header">Done</div>
+                <div class="date-header">Date</div>
+                <div class="task-header">Task</div>
+                <div class="priority-header">Priority</div>
+            </div>
+            <div id="todo-list"></div>
+        </section>
+        <section>
+            <h3>Done</h3>
+            <div class="header">
+                <div class="done-header">Done</div>
+                <div class="date-header">Date</div>
+                <div class="task-header">Task</div>
+                <div class="priority-header">Priority</div>
+            </div>
+            <div id="completed-list">
+            </div>
+        </section>
+    </main>
+    <script>
+        // data penyimpanan u todo
+        const taskDb = [];
+
+        const sortTasksByDateDescending = (tasks) => {
+            return tasks.sort((a, b) => {
+                // Convert date strings to Date objects if they aren't already
+                const dateA = a.date instanceof Date ? a.date : new Date(a.date);
+                const dateB = b.date instanceof Date ? b.date : new Date(b.date);
+                
+                // Compare the dates - ascending order (oldest first)
+                return dateA - dateB;
+            });
+        };
+
+        function addTask() {
+            taskDb.push(function(){
+                const oDate = document.getElementById('new-date').value;
+
+                return {
+                    date: oDate instanceof Date ? oDate : new Date(oDate),
+                    //date: document.getElementById('new-date').value,
+                    task: document.getElementById('new-task').value,
+                    priority: document.getElementById('priority').value,
+                    isDone: false,
+                }
+            }());
+            sortTasksByDateDescending(taskDb);
+            // document.forms['new-task-form'].reset(); // matikan dulu u testing. biar tdk perlu terus ngisi form
+        }
+
+        function clearTodoListElement() {
+            const todoList = document.getElementById("todo-list");
+            while (todoList.firstChild) {
+                todoList.removeChild(todoList.firstChild);
+            }
+
+            const doneList = document.getElementById("completed-list");
+            while (doneList.firstChild) {
+                doneList.removeChild(doneList.firstChild);
+            }
+        }
+
+        function taskItemTemplate(index, task) {
+            const todoItem = document.createElement('div');
+            todoItem.className = "todo-item";
+            
+            if(task.isDone) {
+                todoItem.classList.add("done-item");
+            }
+
+            if ("isOverdue" in task){
+                if (task.isOverdue && !task.isDone){
+                    todoItem.classList.add("overdue-item");
+                }
+            }
+
+            // done
+            todoItem.append(function(){
+                const el = document.createElement('div');
+                el.className = "done-content";
+                
+                const cb = document.createElement('input')
+                cb.type= "checkbox";
+                cb.checked = task.isDone;
+                cb.innerHTML = task.isDone ? 'Undone' : 'Done';
+                cb.onclick = function() {
+                    doneTask(index);
+                };
+                el.append(cb);
+
+                return el;
+            }());
+
+            // date
+            todoItem.append(function(){
+                const oDate = task.date instanceof Date ? task.date : new Date(task.date);
+                const year = oDate.getFullYear();
+                const month = String(oDate.getMonth() + 1).padStart(2, '0');
+                const day = String(oDate.getDate()).padStart(2, '0');
+                const formattedDate = `${day}/${month}/${year}`;
+
+                const el = document.createElement('div');
+                el.innerHTML = formattedDate;//task.date;
+                el.className = "date-content";
+                return el;
+            }());
+
+            // name
+            todoItem.append(function(){
+                const el = document.createElement('div');
+                el.innerHTML = task.task;
+                el.className = "task-content";
+                return el;
+            }());
+
+            // priority
+            todoItem.append(function(){
+                const el = document.createElement('div');
+                el.innerHTML = task.priority;
+                el.className = "priority-content";
+                return el;
+            }());
+
+            // delete
+            todoItem.append(function(){
+                const el = document.createElement('div');
+                el.className = "delete-content";
+
+                const btn = document.createElement('button');
+                btn.type = "button";
+                btn.innerHTML = "Delete";
+                btn.onclick = function() {
+                    deleteTask(index);
+                };
+                el.append(btn);
+
+                return el;
+            }());
+            
+            return todoItem;
+        }
+
+        const deleteAll = document.getElementById("delete-all");
+        deleteAll.onclick = function() {
+            taskDb.length = 0;
+            clearTodoListElement();
+            showTask();
+        };
+
+        function deleteTask(index) {
+            taskDb.splice(index, 1);
+            clearTodoListElement();
+            showTask();
+        }
+
+        function doneTask(index) {
+            //taskDb.splice(index, 1);
+            taskDb[index].isDone = !taskDb[index].isDone;
+
+            clearTodoListElement();
+            showTask();
+        }
+
+        function showTask() {
+            const todoList = document.getElementById("todo-list");
+            const doneList = document.getElementById("completed-list");
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0)
+            
+            for(let i=0; i<taskDb.length; i++){
+                const dateA = taskDb[i].date instanceof Date ? taskDb[i].date : new Date(taskDb[i].date);
+                
+                if (dateA < today) {
+                    taskDb[i].isOverdue = true;
+                }
+
+                // date
+                // https://stackoverflow.com/questions/31977724/how-to-filter-json-data-by-date-range-in-javascript
+                // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/date
+
+                const dateTypeFilter = document.getElementById("date-type-filter");
+                
+                const date1Filter = document.getElementById("filter-date-1");
+
+                const date2Filter = document.getElementById("filter-date-2");
+                const priorityFilter = document.getElementById("filter-priority");
+                
+                const dateFrom = new Date(date1Filter.value);
+                const dateTo = new Date(date2Filter.value);
+                console.log("type: " + dateTypeFilter.value.toLowerCase() + " || data: "+taskDb[i].date + " || filter: "+dateFrom);
+                console.log(dateTypeFilter.value.toLowerCase() == "date");
+                console.log(date1Filter.value == "");
+                console.log(taskDb[i].date.getTime() == dateFrom.getTime());
+                if (
+                    (
+                        (dateTypeFilter.value.toLowerCase() == "date" && (date1Filter.value == "" || taskDb[i].date.getTime() == dateFrom.getTime())) ||
+                        (dateTypeFilter.value.toLowerCase() == "min" && (date1Filter.value == "" || taskDb[i].date >= dateFrom)) ||
+                        (dateTypeFilter.value.toLowerCase() == "max" && (date1Filter.value == "" || taskDb[i].date <= dateFrom)) ||
+                        (
+                            dateTypeFilter.value.toLowerCase() == "range" &&
+                            (date1Filter.value == "" || taskDb[i].date >= dateFrom) &&
+                            (date2Filter.value == "" || taskDb[i].date <= dateTo)
+                        )
+                    ) && 
+                    (
+                        priorityFilter.value == "" || taskDb[i].priority.toLowerCase() == priorityFilter.value.toLowerCase()
+                    )
+                ) {
+                //if(taskDb[i].priority.toLowerCase().includes(priorityFilter.value.trim().toLowerCase())){
+                    todoList.append(taskItemTemplate(i, taskDb[i]));
+                }
+
+                // todoList.append(taskItemTemplate(i, taskDb[i]));
+                if (taskDb[i].isDone){
+                    doneList.append(taskItemTemplate(i, taskDb[i]));
+                }
+            }
+        }
+
+        const dateTypeFilter = document.getElementById("date-type-filter");
+        dateTypeFilter.addEventListener("change", function(e){
+            clearTodoListElement();
+            showTask();
+        });
+
+        const date1Filter = document.getElementById("filter-date-1");
+        date1Filter.addEventListener("change", function(e){
+            clearTodoListElement();
+            showTask();
+        });
+
+        const date2Filter = document.getElementById("filter-date-2");
+        date2Filter.addEventListener("change", function(e){
+            clearTodoListElement();
+            showTask();
+        });
+
+        const priorityFilter = document.getElementById("filter-priority");
+        priorityFilter.addEventListener("change", function(e){
+            clearTodoListElement();
+            showTask();
+        });
+
+        const form = document.getElementById("new-task-form");
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+            addTask();
+            clearTodoListElement();
+            showTask();
+        });
+
+        let setInitDate = function(){
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            document.getElementById('new-date').value = formattedDate;
+        }();
+
+    </script>
+</body>
+</html>
