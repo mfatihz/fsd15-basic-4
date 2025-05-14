@@ -423,17 +423,18 @@ function showTask() {
         if (overdueMatch && dateMatch && priorityMatch) {
             todoList.appendChild(taskItemTemplate(i, task));
             hasActiveTasks = true;
-            
-            if (task.isDone) {
-                doneList.appendChild(taskItemTemplate(i, task));
-                hasCompletedTasks = true;
-            }
+        }
+
+        if (task.isDone) {
+            doneList.appendChild(taskItemTemplate(i, task));
+            hasCompletedTasks = true;
         }
     }
     
     // Show empty states if needed
-    todoEmpty.classList.toggle('hidden', hasActiveTasks || taskDb.length === 0);
-    completedEmpty.classList.toggle('hidden', hasCompletedTasks || taskDb.length === 0);
+    todoEmpty.classList.toggle('hidden', hasActiveTasks);
+    completedEmpty.classList.toggle('hidden', hasCompletedTasks);
+    console.log( hasActiveTasks, taskDb.length, hasCompletedTasks);
 }
 
 // Toggle new task form visibility
