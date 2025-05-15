@@ -425,6 +425,7 @@ function showTask() {
             hasActiveTasks = true;
         }
 
+        // Done selalu ditampilkan, tidak difilter
         if (task.isDone) {
             doneList.appendChild(taskItemTemplate(i, task));
             hasCompletedTasks = true;
@@ -434,7 +435,6 @@ function showTask() {
     // Show empty states if needed
     todoEmpty.classList.toggle('hidden', hasActiveTasks);
     completedEmpty.classList.toggle('hidden', hasCompletedTasks);
-    console.log( hasActiveTasks, taskDb.length, hasCompletedTasks);
 }
 
 // Toggle new task form visibility
